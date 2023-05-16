@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Domain List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(#69C779, #FFFFFF);
+        }
+
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            border: none;
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .upload-button {
+            position: relative;
+            text-align: center;
+        }
+
+        .upload-button button{
+            background-color: #15bb31;
+            color: #FFFFFF;
+            padding: 10px;
+            margin: 0;
+            width: 50%;
+            font-weight: bold;
+        }
+
+        .upload-button .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            text-align: center;
+        }
+
+        .upload-button.loading .loader {
+            display: block;
+        }
+
+        .upload-button.loading button {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .loading span {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        h2 {
+            margin-top: 40px;
+            text-align: center;
+            color: #333333;
+        }
+
+        .results-container {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+
+                var formData = new FormData($('form')[0]); // Get form data
+
+                $('.upload-button').addClass('loading'); // Add loading class to button
+
+                $.ajax({
+                    url: '/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        displayResults(response.results); // Call function to display results
+                        $('.upload-button').removeClass('loading'); // Remove loading class from button
+                    }
+                });
+            });
+
+            function displayResults(results) {
+                var ul = $('#results-list'); // Get <ul> element
+
+                // Iterate through results and append <li> elements to the <ul> element
+                results.forEach(function(result) {
+                    var li = $('<li>').text(result);
+                    ul.append(li);
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>auto_cloudflare</h1>
+        <form method="post" enctype="multipart/form-data">
+            <select name="apikey" id="">
+                <option value="faqihkapo80@gmail.com">sanzking</option>
+                <option value="superwanwan09@gmail.com">tama</option>
+            </select>
+            <input type="file" name="domain_list" accept=".txt">
+            <div class="upload-button">
+                <button type="submit">UPLOAD</button>
+                <div class="loader">
+                    <span>&#128293;</span> Sedang diproses...
+                </div>
+            </div>
+        </form>
+    
+        <h2>Respon:</h2>
+        <div class="results-container">
+            <ul id="results-list"></ul>
+        </div>
+    </div>
+</body>
+</html>    
